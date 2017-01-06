@@ -32,6 +32,11 @@ require.extensions['.jpg'] = function () {return null;};
 // Configure JSDOM and set global variables
 // to simulate a browser environment for tests.
 var jsdom = require('jsdom').jsdom;
+var chai    = require("chai");
+var chaiImmutable  = require("chai-immutable");
+
+// Inject plugin.
+chai.use(chaiImmutable);
 
 var exposedProperties = ['window', 'navigator', 'document'];
 

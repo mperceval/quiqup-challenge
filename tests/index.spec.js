@@ -1,7 +1,7 @@
-import expect from 'expect';
+import { expect } from 'chai';
 
 describe('Test that Mocha is running...', () => {
   it('should pass', () => {
-    expect(true).toEqual(true);
+    expect(true).to.equal(true);
   });
 });
