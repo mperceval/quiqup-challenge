@@ -13,17 +13,17 @@ describe('gameReducer', () => {
     const initialState = Map({
       grid: List.of(
         'O', 'X', 'X',
-        'O', '' , '' ,
-        '' , 'O', ''
+        'O', 'E', 'E' ,
+        'E', 'O', 'E'
       ),
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
       grid:[
-        '', '', '',
-        '', '', '',
-        '', '', ''],
-      currentMove: playerType.HUMAN,
+        'E', 'E', 'E',
+        'E', 'E', 'E',
+        'E', 'E', 'E'],
+      currentMove: playerType.PLAYER,
       gameState: gameState.PLAYING
     }));
   });
@@ -32,26 +32,26 @@ describe('gameReducer', () => {
     const action = {
       type: types.MOVE,
       move: {
-        type: playerType.HUMAN,
+        type: playerType.PLAYER,
         position: 3
       }
     };
     const initialState = Map({
       grid: List.of(
-        '', '', '',
-        '', '', '',
-        '', '', ''),
-      currentMove: playerType.HUMAN,
+        'E', 'E', 'E',
+        'E', 'E', 'E',
+        'E', 'E', 'E'),
+      currentMove: playerType.PLAYER,
       gameState: gameState.PLAYING
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
       grid:[
-        '',  '', '',
-        'O', '', '',
-        '' ,  '', ''
+        'E', 'E', 'E',
+        'O', 'E', 'E',
+        'E' ,'E', 'E'
       ],
-      currentMove: playerType.COMPUTER,
+      currentMove: playerType.AI,
       gameState: gameState.PLAYING
     }));
   });
@@ -60,7 +60,7 @@ describe('gameReducer', () => {
     const action = {
       type: types.MOVE,
       move: {
-        type: playerType.HUMAN,
+        type: playerType.PLAYER,
         position: 6
       }
     };
@@ -68,9 +68,9 @@ describe('gameReducer', () => {
       grid: List.of(
         'O', 'X', 'O',
         'O', 'X', 'X',
-        '' , 'O', 'O'
+        'E' ,'O', 'O'
       ),
-      currentMove: playerType.COMPUTER,
+      currentMove: playerType.PLAYER,
       gameState: gameState.PLAYING
     });
     const nextState = gameReducer(initialState, action);
@@ -80,7 +80,7 @@ describe('gameReducer', () => {
         'O', 'X', 'X',
         'O', 'O', 'O'
       ],
-      gameState: gameState.STALEMATE
+      gameState: gameState.DRAW
     }));
   });
 
@@ -88,27 +88,27 @@ describe('gameReducer', () => {
     const action = {
       type: types.MOVE,
       move: {
-        type: playerType.HUMAN,
+        type: playerType.PLAYER,
         position: 2
       }
     };
     const initialState = Map({
       grid: List.of(
-        'O', 'O', '',
-        'X', 'X', '',
-        '',  '',  ''
+        'O', 'O', 'E',
+        'X', 'X', 'E',
+        'E', 'E', 'E'
       ),
-      currentMove: playerType.COMPUTER,
+      currentMove: playerType.AI,
       gameState: gameState.PLAYING
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
       grid:[
         'O', 'O', 'O',
-        'X', 'X', '',
-        '',  '',  ''
+        'X', 'X', 'E',
+        'E', 'E', 'E'
       ],
-      gameState: gameState.HUMAN_WIN
+      gameState: gameState.PLAYER_WIN
     }));
   });
 

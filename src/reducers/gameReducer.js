@@ -7,8 +7,8 @@ import { playerType, gameState } from '../constants';
 */
 function resetGame() {
   return Map({
-    grid: List.of('', '', '', '', '', '', '', '', ''),
-    currentMove: playerType.HUMAN,
+    grid: List.of('E', 'E', 'E', 'E', 'E', 'E', 'E', 'E', 'E'),
+    currentMove: playerType.PLAYER,
     gameState: gameState.PLAYING
   });
 }
@@ -17,28 +17,35 @@ function resetGame() {
  * Checks if a win condition exists.  Inputs - string to test.  Returns - bool
 */
 function checkForWin(val, grid) {
-  if ((grid.get(0) === val && grid.get(1) === val && grid.get(2) === val) ||
-      (grid.get(3) === val && grid.get(4) === val && grid.get(5) === val) ||
-      (grid.get(6) === val && grid.get(7) === val && grid.get(8) === val) ||
-      (grid.get(0) === val && grid.get(3) === val && grid.get(6) === val) ||
-      (grid.get(1) === val && grid.get(4) === val && grid.get(7) === val) ||
-      (grid.get(2) === val && grid.get(5) === val && grid.get(8) === val) ||
-      (grid.get(0) === val && grid.get(4) === val && grid.get(8) === val) ||
-      (grid.get(2) === val && grid.get(4) === val && grid.get(6) === val)) {
-    return true;
-  } else {
-    return false;
+  // check rows
+  for (var i = 0; i <= 6; i = i + 3) {
+    if (grid.get(i) === val && grid.get(i) === grid.get(i + 1) && grid.get(i + 1) === grid.get(i + 2)) {
+      return true;
+    }
   }
+  // check columns
+  for (var i = 0; i <= 2; i++) {
+    if (grid.get(i) === val && grid.get(i) === grid.get(i + 3) && grid.get(i + 3) === grid.get(i + 6)) {
+      return true;
+    }
+  }
+  // check diagonals
+  for (var i = 0, j = 4; i <= 2; i = i + 2, j = j - 2) {
+    if (grid.get(i) === val && grid.get(i) === grid.get(i + j) && grid.get(i + j) === grid.get(i + 2 * j)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /*
  * Returns a gameState value.  Inputs - moveType - (playerType constant) - Returns string
 */
 function updateGameState(moveType, grid) {
-  const moveVal = moveType === playerType.HUMAN ? 'O' : 'X';
+  const moveVal = moveType === playerType.PLAYER ? 'O' : 'X';
   let newGameState = gameState.PLAYING;
-  if (numMoves(grid) === 9) {
-      newGameState = gameState.STALEMATE;
+  if (emptyCells(grid) === 0) {
+      newGameState = gameState.DRAW;
   } else if (checkForWin(moveVal, grid)) {
     newGameState = `${moveType}_WIN`;
   }
@@ -46,10 +53,10 @@ function updateGameState(moveType, grid) {
 }
 
 /*
- * Returns count of the number of values in the grid.  Inputs - grid - Returns number
+ * Returns count of the number of empty cells in the grid.  Inputs - grid - Returns number
 */
-function numMoves(grid) {
-   return grid.filter(item => item !== '').size;
+function emptyCells(grid) {
+   return grid.filter(item => item === 'E').size;
 }
 
 /*
@@ -59,7 +66,7 @@ function numMoves(grid) {
  * Returns new state object
 */
 function move(state, move) {
-  const moveVal = move.type === playerType.HUMAN ? 'O' : 'X';
+  const moveVal = move.type === playerType.PLAYER ? 'O' : 'X';
   const movePos = move.position;
   const grid = state.get('grid').set(movePos, moveVal);
   const gameState = updateGameState(move.type, grid);
@@ -72,7 +79,7 @@ function move(state, move) {
 
   // If we are still playing then add in the currentMove property
   if (gameState === 'PLAYING') {
-    const nextMove = move.type === playerType.HUMAN ? playerType.COMPUTER : playerType.HUMAN;
+    const nextMove = move.type === playerType.PLAYER ? playerType.AI : playerType.PLAYER;
     return result.set('currentMove', nextMove);
   }
   return result;

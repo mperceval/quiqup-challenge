@@ -1,11 +1,11 @@
 export const playerType = {
-  HUMAN: 'HUMAN',
-  COMPUTER: 'COMPUTER'
+  PLAYER: 'PLAYER',
+  AI: 'AI'
 };
 
 export const gameState = {
   PLAYING: 'PLAYING',
-  HUMAN_WIN: 'HUMAN_WIN',
-  COMPUTER_WIN: 'COMPUTER_WIN',
-  STALEMATE: 'STALEMATE'
+  PLAYER_WIN: 'PLAYER_WIN',
+  AI_WIN: 'AI',
+  DRAW: 'DRAW'
 };
