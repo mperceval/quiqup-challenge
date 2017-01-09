@@ -18,19 +18,19 @@ function resetGame() {
 */
 function checkForWin(val, grid) {
   // check rows
-  for (var i = 0; i <= 6; i = i + 3) {
+  for (let i = 0; i <= 6; i = i + 3) {
     if (grid.get(i) === val && grid.get(i) === grid.get(i + 1) && grid.get(i + 1) === grid.get(i + 2)) {
       return true;
     }
   }
   // check columns
-  for (var i = 0; i <= 2; i++) {
+  for (let i = 0; i <= 2; i++) {
     if (grid.get(i) === val && grid.get(i) === grid.get(i + 3) && grid.get(i + 3) === grid.get(i + 6)) {
       return true;
     }
   }
   // check diagonals
-  for (var i = 0, j = 4; i <= 2; i = i + 2, j = j - 2) {
+  for (let i = 0, j = 4; i <= 2; i = i + 2, j = j - 2) {
     if (grid.get(i) === val && grid.get(i) === grid.get(i + j) && grid.get(i + j) === grid.get(i + 2 * j)) {
       return true;
     }
@@ -49,8 +49,6 @@ function updateGameState(moveType, grid) {
   } else if (emptyCells(grid)) {
     newGameState = gameState.DRAW;
   }
-
-  console.log('updateGameState : ', newGameState);
   return newGameState;
 }
 
@@ -65,7 +63,7 @@ function emptyCells(grid) {
  * Returns index of the next available grid move.  Inputs - grid - Returns number (index)
 */
 function getNextAIMove(grid) {
-  var indxs = [];
+  let indxs = [];
   for (let i = 0; i < 9; i++) {
     if (grid.get(i) === "E") {
       return i;
