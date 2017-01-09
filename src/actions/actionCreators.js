@@ -6,12 +6,18 @@ export function resetGame() {
   };
 }
 
-export function move(playerType, position) {
+export function playerMove(position) {
   return {
-    type: types.MOVE,
+    type: types.PLAYER_MOVE,
     move: {
       playerType,
       position
     }
+  };
+}
+
+export function aiMove() {
+  return {
+    type: types.AI_MOVE,
   };
 }

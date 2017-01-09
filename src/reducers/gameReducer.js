@@ -79,7 +79,6 @@ function getNextAIMove(grid) {
  * Inputs - state object and move object.
  * Returns new state object
 */
-
 function playerMove(state, move) {
   const moveVal = 'O';
   const movePos = move.position;
