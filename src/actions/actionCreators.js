@@ -6,11 +6,11 @@ export function resetGame() {
   };
 }
 
-export function move(type, position) {
+export function move(playerType, position) {
   return {
     type: types.MOVE,
     move: {
-      type,
+      playerType,
       position
     }
   };

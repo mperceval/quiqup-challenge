@@ -28,11 +28,11 @@ describe('gameReducer', () => {
     }));
   });
 
-  it('handles MOVE - player non-winning move', () => {
+  it('handles PLAYER_MOVE - player non-winning move', () => {
     const action = {
-      type: types.MOVE,
+      type: types.PLAYER_MOVE,
       move: {
-        type: playerType.PLAYER,
+        playerType: playerType.PLAYER,
         position: 3
       }
     };
@@ -56,19 +56,43 @@ describe('gameReducer', () => {
     }));
   });
 
-  it('handles MOVE - player non-winning move resulting in stalemate', () => {
+  it('handles AI_MOVE - AI non-winning move', () => {
     const action = {
-      type: types.MOVE,
+      type: types.AI_MOVE
+    };
+    const initialState = Map({
+      grid: List.of(
+        'E', 'E', 'E',
+        'E', 'E', 'E',
+        'E', 'E', 'E'),
+      currentMove: playerType.AI,
+      gameState: gameState.PLAYING
+    });
+    const nextState = gameReducer(initialState, action);
+    expect(nextState).to.equal(fromJS({
+      grid:[
+        'X', 'E', 'E',
+        'E', 'E', 'E',
+        'E' ,'E', 'E'
+      ],
+      currentMove: playerType.PLAYER,
+      gameState: gameState.PLAYING
+    }));
+  });
+
+  it('handles PLAYER_MOVE - player non-winning move resulting in stalemate', () => {
+    const action = {
+      type: types.PLAYER_MOVE,
       move: {
-        type: playerType.PLAYER,
-        position: 6
+        playerType: playerType.PLAYER,
+        position: 7
       }
     };
     const initialState = Map({
       grid: List.of(
         'O', 'X', 'O',
         'O', 'X', 'X',
-        'E' ,'O', 'O'
+        'X' ,'E', 'O'
       ),
       currentMove: playerType.PLAYER,
       gameState: gameState.PLAYING
@@ -78,17 +102,40 @@ describe('gameReducer', () => {
       grid:[
         'O', 'X', 'O',
         'O', 'X', 'X',
-        'O', 'O', 'O'
+        'X', 'O', 'O'
       ],
       gameState: gameState.DRAW
     }));
   });
 
-  it('handles MOVE - player winning move resulting in player win', () => {
+  it('handles AI_MOVE - AI non-winning move resulting in stalemate', () => {
     const action = {
-      type: types.MOVE,
+      type: types.AI_MOVE
+    };
+    const initialState = Map({
+      grid: List.of(
+        'X', 'O', 'X',
+        'X', 'O', 'O',
+        'O', 'E', 'X'),
+      currentMove: playerType.AI,
+      gameState: gameState.PLAYING
+    });
+    const nextState = gameReducer(initialState, action);
+    expect(nextState).to.equal(fromJS({
+      grid:[
+        'X', 'O', 'X',
+        'X', 'O', 'O',
+        'O' ,'X', 'X'
+      ],
+      gameState: gameState.DRAW
+    }));
+  });
+
+  it('handles PLAYER_MOVE - player winning move resulting in player win', () => {
+    const action = {
+      type: types.PLAYER_MOVE,
       move: {
-        type: playerType.PLAYER,
+        playerType: playerType.PLAYER,
         position: 2
       }
     };
@@ -112,4 +159,27 @@ describe('gameReducer', () => {
     }));
   });
 
+  it('handles AI - AI winning move resulting in AI win', () => {
+    const action = {
+      type: types.AI_MOVE,
+    };
+    const initialState = Map({
+      grid: List.of(
+        'X', 'X', 'E',
+        'O', 'O', 'E',
+        'E', 'E', 'E'
+      ),
+      currentMove: playerType.AI,
+      gameState: gameState.PLAYING
+    });
+    const nextState = gameReducer(initialState, action);
+    expect(nextState).to.equal(fromJS({
+      grid:[
+        'X', 'X', 'X',
+        'O', 'O', 'E',
+        'E', 'E', 'E'
+      ],
+      gameState: gameState.AI_WIN
+    }));
+  });
 });

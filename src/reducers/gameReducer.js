@@ -44,11 +44,13 @@ function checkForWin(val, grid) {
 function updateGameState(moveType, grid) {
   const moveVal = moveType === playerType.PLAYER ? 'O' : 'X';
   let newGameState = gameState.PLAYING;
-  if (emptyCells(grid) === 0) {
-      newGameState = gameState.DRAW;
-  } else if (checkForWin(moveVal, grid)) {
+  if (checkForWin(moveVal, grid)) {
     newGameState = `${moveType}_WIN`;
+  } else if (emptyCells(grid)) {
+    newGameState = gameState.DRAW;
   }
+
+  console.log('updateGameState : ', newGameState);
   return newGameState;
 }
 
@@ -56,7 +58,19 @@ function updateGameState(moveType, grid) {
  * Returns count of the number of empty cells in the grid.  Inputs - grid - Returns number
 */
 function emptyCells(grid) {
-   return grid.filter(item => item === 'E').size;
+   return grid.filter(item => item === 'E').size === 0;
+}
+
+/*
+ * Returns index of the next available grid move.  Inputs - grid - Returns number (index)
+*/
+function getNextAIMove(grid) {
+  var indxs = [];
+  for (let i = 0; i < 9; i++) {
+    if (grid.get(i) === "E") {
+      return i;
+    }
+  }
 }
 
 /*
@@ -65,11 +79,12 @@ function emptyCells(grid) {
  * Inputs - state object and move object.
  * Returns new state object
 */
-function move(state, move) {
-  const moveVal = move.type === playerType.PLAYER ? 'O' : 'X';
+
+function playerMove(state, move) {
+  const moveVal = 'O';
   const movePos = move.position;
   const grid = state.get('grid').set(movePos, moveVal);
-  const gameState = updateGameState(move.type, grid);
+  const gameState = updateGameState(move.playerType, grid);
 
   // Create updated state
   const result = Map({
@@ -79,9 +94,30 @@ function move(state, move) {
 
   // If we are still playing then add in the currentMove property
   if (gameState === 'PLAYING') {
-    const nextMove = move.type === playerType.PLAYER ? playerType.AI : playerType.PLAYER;
+    const nextMove = playerType.AI;
     return result.set('currentMove', nextMove);
   }
+  return result;
+}
+
+function aiMove(state) {
+  const moveVal = 'X';
+  const movePos = getNextAIMove(state.get('grid'));
+  const grid = state.get('grid').set(movePos, moveVal);
+  const gameState = updateGameState(playerType.AI, grid);
+
+  // Create updated state
+  const result = Map({
+    grid,
+    gameState
+  });
+
+  // If we are still playing then add in the currentMove property
+  if (gameState === 'PLAYING') {
+    const nextMove = playerType.PLAYER;
+    return result.set('currentMove', nextMove);
+  }
+
   return result;
 }
 
@@ -90,8 +126,11 @@ export default function (state = Map(), action) {
     case types.RESET_GAME:
       return resetGame();
 
-    case types.MOVE:
-      return move(state, action.move);
+    case types.PLAYER_MOVE:
+      return playerMove(state, action.move);
+
+      case types.AI_MOVE:
+        return aiMove(state);
   }
   return state;
 }

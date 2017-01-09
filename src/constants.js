@@ -6,6 +6,6 @@ export const playerType = {
 export const gameState = {
   PLAYING: 'PLAYING',
   PLAYER_WIN: 'PLAYER_WIN',
-  AI_WIN: 'AI',
+  AI_WIN: 'AI_WIN',
   DRAW: 'DRAW'
 };
