@@ -2,11 +2,11 @@ import { List, Map, fromJS } from 'immutable';
 import { expect } from 'chai';
 
 import * as types from '../../src/actions/ActionTypes';
-import { playerType, gameState } from '../../src/constants';
+import { playerTypes, gameStates } from '../../src/constants';
 import gameReducer from '../../src/reducers/gameReducer';
 
 describe('gameReducer', () => {
-  it('handles RESET_GAME', () => {
+  it('should handle RESET_GAME', () => {
     const action = {
       type: types.RESET_GAME
     };
@@ -23,16 +23,16 @@ describe('gameReducer', () => {
         'E', 'E', 'E',
         'E', 'E', 'E',
         'E', 'E', 'E'],
-      currentMove: playerType.PLAYER,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.PLAYER,
+      gameState: gameStates.PLAYING
     }));
   });
 
-  it('handles PLAYER_MOVE - player non-winning move', () => {
+  it('should handle PLAYER_MOVE - player non-winning move', () => {
     const action = {
       type: types.PLAYER_MOVE,
       move: {
-        playerType: playerType.PLAYER,
+        playerType: playerTypes.PLAYER,
         position: 3
       }
     };
@@ -41,8 +41,8 @@ describe('gameReducer', () => {
         'E', 'E', 'E',
         'E', 'E', 'E',
         'E', 'E', 'E'),
-      currentMove: playerType.PLAYER,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.PLAYER,
+      gameState: gameStates.PLAYING
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
@@ -51,12 +51,12 @@ describe('gameReducer', () => {
         'O', 'E', 'E',
         'E' ,'E', 'E'
       ],
-      currentMove: playerType.AI,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.AI,
+      gameState: gameStates.PLAYING
     }));
   });
 
-  it('handles AI_MOVE - AI non-winning move', () => {
+  it('should handle AI_MOVE - AI non-winning move', () => {
     const action = {
       type: types.AI_MOVE
     };
@@ -65,8 +65,8 @@ describe('gameReducer', () => {
         'E', 'E', 'E',
         'E', 'E', 'E',
         'E', 'E', 'E'),
-      currentMove: playerType.AI,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.AI,
+      gameState: gameStates.PLAYING
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
@@ -75,16 +75,16 @@ describe('gameReducer', () => {
         'E', 'E', 'E',
         'E' ,'E', 'E'
       ],
-      currentMove: playerType.PLAYER,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.PLAYER,
+      gameState: gameStates.PLAYING
     }));
   });
 
-  it('handles PLAYER_MOVE - player non-winning move resulting in stalemate', () => {
+  it('should handle PLAYER_MOVE - player non-winning move resulting in stalemate', () => {
     const action = {
       type: types.PLAYER_MOVE,
       move: {
-        playerType: playerType.PLAYER,
+        playerType: playerTypes.PLAYER,
         position: 7
       }
     };
@@ -94,8 +94,8 @@ describe('gameReducer', () => {
         'O', 'X', 'X',
         'X' ,'E', 'O'
       ),
-      currentMove: playerType.PLAYER,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.PLAYER,
+      gameState: gameStates.PLAYING
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
@@ -104,11 +104,11 @@ describe('gameReducer', () => {
         'O', 'X', 'X',
         'X', 'O', 'O'
       ],
-      gameState: gameState.DRAW
+      gameState: gameStates.DRAW
     }));
   });
 
-  it('handles AI_MOVE - AI non-winning move resulting in stalemate', () => {
+  it('should handle AI_MOVE - AI non-winning move resulting in stalemate', () => {
     const action = {
       type: types.AI_MOVE
     };
@@ -117,8 +117,8 @@ describe('gameReducer', () => {
         'X', 'O', 'X',
         'X', 'O', 'O',
         'O', 'E', 'X'),
-      currentMove: playerType.AI,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.AI,
+      gameState: gameStates.PLAYING
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
@@ -127,15 +127,15 @@ describe('gameReducer', () => {
         'X', 'O', 'O',
         'O' ,'X', 'X'
       ],
-      gameState: gameState.DRAW
+      gameState: gameStates.DRAW
     }));
   });
 
-  it('handles PLAYER_MOVE - player winning move resulting in player win', () => {
+  it('should handle PLAYER_MOVE - player winning move resulting in player win', () => {
     const action = {
       type: types.PLAYER_MOVE,
       move: {
-        playerType: playerType.PLAYER,
+        playerType: playerTypes.PLAYER,
         position: 2
       }
     };
@@ -145,8 +145,8 @@ describe('gameReducer', () => {
         'X', 'X', 'E',
         'E', 'E', 'E'
       ),
-      currentMove: playerType.AI,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.AI,
+      gameState: gameStates.PLAYING
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
@@ -155,11 +155,11 @@ describe('gameReducer', () => {
         'X', 'X', 'E',
         'E', 'E', 'E'
       ],
-      gameState: gameState.PLAYER_WIN
+      gameState: gameStates.PLAYER_WIN
     }));
   });
 
-  it('handles AI - AI winning move resulting in AI win', () => {
+  it('should handle AI - AI winning move resulting in AI win', () => {
     const action = {
       type: types.AI_MOVE,
     };
@@ -169,8 +169,8 @@ describe('gameReducer', () => {
         'O', 'O', 'E',
         'E', 'E', 'E'
       ),
-      currentMove: playerType.AI,
-      gameState: gameState.PLAYING
+      currentMove: playerTypes.AI,
+      gameState: gameStates.PLAYING
     });
     const nextState = gameReducer(initialState, action);
     expect(nextState).to.equal(fromJS({
@@ -179,7 +179,27 @@ describe('gameReducer', () => {
         'O', 'O', 'E',
         'E', 'E', 'E'
       ],
-      gameState: gameState.AI_WIN
+      gameState: gameStates.AI_WIN
     }));
+  });
+
+  it('should handle PLAYER_MOVE - player cannot select occupied cell', () => {
+    const action = {
+      type: types.PLAYER_MOVE,
+      move: {
+        playerType: playerTypes.PLAYER,
+        position: 3
+      }
+    };
+    const initialState = Map({
+      grid: List.of(
+        'E', 'E', 'E',
+        'O', 'E', 'E',
+        'E', 'E', 'E'),
+      currentMove: playerTypes.PLAYER,
+      gameState: gameStates.PLAYING
+    });
+    const nextState = gameReducer(initialState, action);
+    expect(nextState).to.equal(initialState);
   });
 });

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Cell from './Cell';
 
-const Grid = ({ data, onButtonClick }) => {
+const Grid = ({ data, onGridCellClick, disableGrid }) => {
 
   /*
    * Taken from http://www.frontcoded.com/splitting-javascript-array-into-chunks
@@ -15,7 +15,7 @@ const Grid = ({ data, onButtonClick }) => {
       groups.push(mutableData.slice(i, i + chunkSize));
     }
     return groups;
-  }
+  };
 
   /*
    * Creates a table row - returns td wrapped Cell.
@@ -23,7 +23,13 @@ const Grid = ({ data, onButtonClick }) => {
   const createRow = (rowData, rowNum) => {
     return rowData.map((item, idx) => {
       const val = item === 'E' ? '' : item;
-      return <td key={idx + rowNum}><Cell idx={idx + rowNum} val={val} onClick={onButtonClick} /></td>;
+      return (<td key={idx + rowNum}>
+        <Cell
+          idx={idx + rowNum}
+          val={val}
+          disabled={disableGrid}
+          onClick={onGridCellClick} />
+        </td>);
     });
   };
 
@@ -32,7 +38,13 @@ const Grid = ({ data, onButtonClick }) => {
     return <tr key={idx}>{createRow(data, idx * 3)}</tr>;
   });
 
-  return (<table><tbody>{tableData}</tbody></table>);
+  return (<table className="table-center"><tbody>{tableData}</tbody></table>);
+};
+
+Grid.propTypes = {
+  data: PropTypes.object.isRequired,
+  onGridCellClick: PropTypes.func.isRequired,
+  disableGrid: PropTypes.bool.isRequired
 };
 
 export default Grid;

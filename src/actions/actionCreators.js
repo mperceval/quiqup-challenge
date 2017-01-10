@@ -1,5 +1,5 @@
 import * as types from './actionTypes';
-import { playerType } from '../constants';
+import { playerTypes } from '../constants';
 
 export function resetGame() {
   return {
@@ -11,7 +11,7 @@ export function playerMove(position) {
   return {
     type: types.PLAYER_MOVE,
     move: {
-      playerType: playerType.PLAYER,
+      playerType: playerTypes.PLAYER,
       position
     }
   };
