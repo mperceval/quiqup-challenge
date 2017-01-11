@@ -4,17 +4,16 @@ import Cell from './Cell';
 const Grid = ({ data, onGridCellClick, disableGrid }) => {
 
   /*
-   * Taken from http://www.frontcoded.com/splitting-javascript-array-into-chunks
    * Chunks array into a array of groups - return array.
    */
-  const groupData = (data, chunkSize) => {
-    // Convert immutable object data to mutable... - Don't love this!
-    const mutableData = data.toJS();
-    const groups = [];
-    for (let i = 0; i < mutableData.length; i += chunkSize) {
-      groups.push(mutableData.slice(i, i + chunkSize));
-    }
-    return groups;
+  const groupData = (data) => {
+    const [a, b, c, d, e, f, g, h, i] = data;
+
+    return [
+      [a, b, c],
+      [d, e, f],
+      [g, h, i]
+    ];
   };
 
   /*
@@ -33,7 +32,7 @@ const Grid = ({ data, onGridCellClick, disableGrid }) => {
     });
   };
 
-  const tableData = groupData(data, 3).map((data, idx) => {
+  const tableData = groupData(data).map((data, idx) => {
     // Wrap each row in a tr
     return <tr key={idx}>{createRow(data, idx * 3)}</tr>;
   });

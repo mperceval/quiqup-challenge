@@ -8,7 +8,6 @@ import Grid from './Grid';
 import ResetButton from './ResetButton';
 
 class GameContainer extends React.Component {
-
   constructor(props, context) {
     super(props, context);
     this.onGridCellClick = this.onGridCellClick.bind(this);
@@ -28,7 +27,6 @@ class GameContainer extends React.Component {
     const { playerMove } = this.props.actions;
     const { id:pos } = e.target;
     if (currentMove === playerTypes.PLAYER) {
-
       playerMove(pos);
     }
   }
@@ -84,8 +82,8 @@ GameContainer.propTypes = {
   gameState: PropTypes.string.isRequired
 };
 
-function mapStateToProps(state, ownProps) {
-  console.log('GameContainer - mapStateToProps - state : ', state);
+// TODO: This export is provided to test the function
+export function mapStateToProps(state, ownProps) {
   return {
     grid: state.get('grid'),
     currentMove: state.get('currentMove'),
@@ -93,7 +91,11 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+// TODO: This export is provided to test the function
+export function mapDispatchToProps(dispatch) {
+  const a = {
+    actions: bindActionCreators(gameActions, dispatch)
+  };
   return {
     actions: bindActionCreators(gameActions, dispatch)
   };

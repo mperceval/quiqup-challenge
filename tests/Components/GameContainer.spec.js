@@ -1,39 +1,65 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import { mount } from 'enzyme';
-import { fromJS } from 'immutable';
-import { storeFake } from '../data/storeFake';
-import GameContainer from '../../src/components/GameContainer';
-import Grid from '../../src/components/Grid';
-import Cell from '../../src/components/Cell';
+import { List, Map, fromJS } from 'immutable';
+import { expect } from 'chai';
+import sinon from 'sinon';
+
+import * as types from '../../src/actions/ActionTypes';
 import { playerTypes, gameStates } from '../../src/constants';
+import { mapStateToProps, mapDispatchToProps } from '../../src/components/GameContainer';
+
+// TODO: Finish tests
 
 describe('GameContainer', () => {
-	let component;
-	let gridComponent;
+	describe('mapStateToProps', () => {
+		it('returns the correct props format', () => {
+			const data = (Map({
+		    grid: List.of(
+					'E', 'E', 'E',
+					'E', 'E', 'E',
+					'E', 'E', 'E'
+				),
+				currentMove: playerTypes.PLAYER,
+				gameState: gameStates.PLAYING
+			}));
 
-	beforeEach(() => {
-		const store = storeFake(fromJS({
-      grid:[
-        'E', 'E', 'E',
-        'E', 'E', 'E',
-        'E', 'E', 'E'],
-      currentMove: playerTypes.PLAYER,
-      gameState: gameStates.PLAYING
-    }));
-
-		const wrapper = mount(
-			<Provider store={store}>
-				<GameContainer />
-			</Provider>
-		);
-
-		component = wrapper.find(GameContainer);
-		gridComponent = Component.find(Grid);
+			const expectedResult = {
+		    grid: List.of(
+					'E', 'E', 'E',
+					'E', 'E', 'E',
+					'E', 'E', 'E'
+				),
+				currentMove: playerTypes.PLAYER,
+				gameState: gameStates.PLAYING
+			};
+			const result = mapStateToProps(data, {});
+			expect(result).to.deep.equal(expectedResult);
+		});
 	});
 
-	it('should render', () => {
-		expect(Component.length).toBeTruthy();
-		expect(gridComponent.length).toBeTruthy();
+	describe('mapDispatchToProps', () => {
+		describe('aiMove', () => {
+
+			it('should be injected', () => {
+	      const dispatch = sinon.spy();
+	      const actions = mapDispatchToProps(dispatch).actions;
+	      expect(actions.aiMove).be.function;
+	    });
+		});
+
+		describe('playerMove', () => {
+			it('should be injected', () => {
+	      const dispatch = sinon.spy();
+	      const result = mapDispatchToProps(dispatch);
+	      expect(result.playerMove).be.function;
+	    });
+		});
+
+		describe('resetGame', () => {
+			it('should be injected', () => {
+	      const dispatch = sinon.spy();
+	      const result = mapDispatchToProps(dispatch);
+	      expect(result.resetGame).be.function;
+	    });
+		});
+
 	});
 });
