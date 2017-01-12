@@ -60,7 +60,7 @@ class GameContainer extends React.Component {
 
     return (
       <div>
-        <div className="title">Tic Tac Toe - M. Perceval</div>
+        <div className="title">Impossible Tic Tac Toe - M. Perceval</div>
         <Grid
           data={data}
           currentMove={currentMove}
@@ -76,7 +76,7 @@ class GameContainer extends React.Component {
 }
 
 GameContainer.propTypes = {
-  currentMove: PropTypes.number.isRequired,
+  currentMove: PropTypes.string,
   actions: PropTypes.object.isRequired,
   grid: PropTypes.object.isRequired,
   gameState: PropTypes.string.isRequired
